@@ -8,8 +8,8 @@ all: up
 # create the wordpress and mariadb data directories.
 # start the containers in the background and leaves them running
 up: build
-	@mkdir -p $(WP_DATA)
-	@mkdir -p $(DB_DATA)
+	mkdir -p $(WP_DATA)
+	mkdir -p $(DB_DATA)
 	docker-compose -f ./docker-compose.yml up -d
 
 # stop the containers
@@ -34,17 +34,17 @@ build:
 # remove the wordpress and mariadb data directories.
 # the (|| true) is used to ignore the error if there are no containers running to prevent the make command from stopping.
 clean:
-	@docker stop $$(docker ps -qa) || true
-	@docker rm $$(docker ps -qa) || true
-	@docker rmi -f $$(docker images -qa) || true
-	@docker volume rm $$(docker volume ls -q) || true
-	@docker network rm $$(docker network ls -q) || true
-	@rm -rf $(WP_DATA) || true
-	@rm -rf $(DB_DATA) || true
+	docker stop $$(docker ps -qa) || true
+	docker rm $$(docker ps -qa) || true
+	docker rmi -f $$(docker images -qa) || true
+	docker volume rm $$(docker volume ls -q) || true
+	docker network rm $$(docker network ls -q) || true
+	rm -rf $(WP_DATA) || true
+	rm -rf $(DB_DATA) || true
 
 # clean and start the containers
 re: clean up
 
 # prune the containers: execute the clean target and remove all containers, images, volumes and networks from the system.
 prune: clean
-	@docker system prune -a --volumes -f
+	docker system prune -a --volumes -f
