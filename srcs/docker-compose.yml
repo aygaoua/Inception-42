@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   mariadb:
-    image: mariadb:10.5
+    image: mariadb:latest
     container_name: mariadb
     volumes:
       - mariadb:/var/lib/mysql
@@ -31,7 +31,7 @@ services:
     restart: always
 
   wordpress:
-    image: wordpress:5.8
+    image: wordpress:latest
     container_name: wordpress
     depends_on:
       mariadb:
