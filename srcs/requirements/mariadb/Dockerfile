@@ -1,11 +1,29 @@
+# FROM debian:bullseye
+
+# RUN apt-get update && apt-get upgrade -y
+
+# RUN apt-get install -y mariadb-server netcat
+
+# COPY ./tools/mdb-conf.sh /
+
+# COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
+
+# RUN chmod +x mdb-conf.sh
+
+# CMD ["./mdb-conf.sh"]
+
 FROM debian:bullseye
 
-RUN apt-get update && apt-get upgrade -y
+RUN apt update -y && apt upgrade -y
 
-RUN apt-get install -y mariadb-server netcat
+RUN apt install vim -y
 
-COPY ./mdb-conf.sh /mdb-conf.sh
+RUN apt-get install mariadb-server -y
 
-RUN chmod +x /mdb-conf.sh
+COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 
-ENTRYPOINT ["./mdb-conf.sh"]
+COPY tools/mdb-conf.sh /
+
+RUN chmod +x mdb-conf.sh
+
+CMD ["./mdb-conf.sh"]
