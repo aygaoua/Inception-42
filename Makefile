@@ -33,6 +33,7 @@ clean-imgs:
 
 clean-containers-volumes:
 	docker rm -vf $$(docker ps -aq)
+	docker volume rm mariadb wordpress
 
 clean: clean-containers-volumes clean-imgs
 

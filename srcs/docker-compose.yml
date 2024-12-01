@@ -2,7 +2,7 @@ version: '3.8'
 services:
   mariadb:
     image: mariadb:iniesta
-    build : ./requirements/mariadb
+    build: ./requirements/mariadb
     container_name: mariadb
     volumes:
       - mariadb:/var/lib/mysql
@@ -10,113 +10,71 @@ services:
       - .env
     networks:
       - inception
-    restart: unless-stopped
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
 
   nginx:
     image: nginx:iniesta
-    build : ./requirements/nginx
+    build: ./requirements/nginx
     container_name: nginx
     ports:
       - "443:443"
-    depends_on:
-      - wordpress
     volumes:
       - wordpress:/var/www/wordpress
     networks:
       - inception
-    restart: unless-stopped
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
   wordpress:
     image: wordpress:iniesta
-    build : ./requirements/wordpress
+    build: ./requirements/wordpress
     container_name: wordpress
     depends_on:
-      - mariadb 
+      mariadb:
+        condition: service_healthy
     volumes:
       - wordpress:/var/www/wordpress
     env_file:
       - .env
     networks:
       - inception
-    restart: unless-stopped
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "localhost"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
 
 volumes:
   mariadb:
     name: mariadb
     driver: local
     driver_opts:
-      device: '/home/data/mariadb'
-      o : 'bind'
-      type : 'none'
+      device: '/home/azgaoua/data/mariadb'
+      o: 'bind'
+      type: 'none'
 
   wordpress:
     name: wordpress
     driver: local
     driver_opts:
-      device: '/home/data/wordpress'
-      o : 'bind'
-      type : 'none'
+      device: '/home/azgaoua/data/wordpress'
+      o: 'bind'
+      type: 'none'
 
-# networks:
 networks:
   inception:
+    name: inception
     driver: bridge
-
-
-# services:
-#   nginx:
-#     image: nginx:azgaoua
-#     container_name: nginx
-#     networks:
-#       - inception
-#     depends_on:
-#       - wordpress
-#     build: ./requirements/nginx
-#     env_file: .env
-#     volumes:
-#       - wordpress:/var/www/html
-#     restart: always
-#     ports:
-#       - "443:443"
-
-#   mariadb:
-#     image: mariadb:azgaoua
-#     container_name: mariadb
-#     networks:
-#       - inception
-#     build: ./requirements/mariadb
-#     env_file: .env
-#     volumes:
-#       - mariadb:/var/lib/mysql
-#     restart: always
-
-#   wordpress:
-#     depends_on:
-#       - mariadb
-#     image: wordpress:azgaoua
-#     container_name: wordpress
-#     networks:
-#       - inception
-#     build: ./requirements/wordpress
-#     env_file: .env
-#     volumes:
-#       - wordpress:/var/www/html
-#     restart: always
-
-# volumes:
-#   wordpress:
-#     driver: local
-#     driver_opts:
-#       type: 'none'
-#       o: 'bind'
-#       device: '/home/azgaoua/data/wordpress'
-#   mariadb:
-#     driver: local
-#     driver_opts:
-#       type: 'none'
-#       o: 'bind'
-#       device: '/home/azgaoua/data/mariadb'
-
-# networks:
-#   inception:
-#     driver: bridge
