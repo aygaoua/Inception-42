@@ -18,22 +18,3 @@ RUN  chmod +x wp_conf.sh
 
 # define the entrypoint command to run when the container starts
 CMD ["./wp_conf.sh"]
-
-
-# FROM debian:bullseye
-
-# RUN apt-get update
-
-# RUN apt install curl -y
-
-# RUN apt-get -y install wget
-
-# RUN apt-get install -y php php-fpm php-mysql mariadb-client
-
-# #PHP7.3.31
-
-# COPY tools/wp_conf.sh .
-
-# RUN chmod +x wp_conf.sh
-
-# CMD ["./wp_conf.sh"]
