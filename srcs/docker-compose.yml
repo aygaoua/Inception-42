@@ -1,5 +1,6 @@
 version: '3.8'
 services:
+
   mariadb:
     image: mariadb:iniesta
     build: ./requirements/mariadb
@@ -11,12 +12,22 @@ services:
     networks:
       - inception
     restart: always
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 60s
+
+  wordpress:
+    image: wordpress:iniesta
+    build: ./requirements/wordpress
+    container_name: wordpress
+    depends_on:
+      - mariadb
+    volumes:
+      - wordpress:/var/www/wordpress
+    env_file:
+      - .env
+    networks:
+      - inception
+    restart: always
+    depends_on:
+      - mariadb
 
   nginx:
     image: nginx:iniesta
@@ -29,33 +40,8 @@ services:
     networks:
       - inception
     restart: always
-    healthcheck:
-      test: ["CMD", "curl", "-f", "localhost"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
-
-  wordpress:
-    image: wordpress:iniesta
-    build: ./requirements/wordpress
-    container_name: wordpress
     depends_on:
-      mariadb:
-        condition: service_healthy
-    volumes:
-      - wordpress:/var/www/wordpress
-    env_file:
-      - .env
-    networks:
-      - inception
-    restart: always
-    healthcheck:
-      test: ["CMD", "curl", "-f", "localhost"]
-      interval: 15s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
+      - wordpress
 
 volumes:
   mariadb:
