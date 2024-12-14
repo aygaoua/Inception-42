@@ -17,8 +17,6 @@ services:
     image: wordpress:iniesta
     build: ./requirements/wordpress
     container_name: wordpress
-    depends_on:
-      - mariadb
     volumes:
       - wordpress:/var/www/wordpress
     env_file:

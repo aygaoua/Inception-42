@@ -5,7 +5,7 @@
 
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 
-sleep 20
+# sleep 20
 # wp-cli permission
 chmod +x wp-cli.phar
 # wp-cli move to bin
@@ -17,7 +17,7 @@ cd /var/www/wordpress
 chmod -R 755 /var/www/wordpress/
 # change owner of wordpress directory to www-data
 chown -R www-data:www-data /var/www/wordpress
-#---------------------------------------------------wp installation---------------------------------------------------##---------------------------------------------------wp installation---------------------------------------------------#
+#---------------------------------------------------wp installation---------------------------------------------------#
 
 # download wordpress core files
 wp core download --allow-root
