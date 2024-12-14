@@ -5,7 +5,6 @@
 
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 
-# sleep 20
 # wp-cli permission
 chmod +x wp-cli.phar
 # wp-cli move to bin

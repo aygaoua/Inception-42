@@ -3,8 +3,6 @@
 #--------------mariadb start--------------#
 service mariadb start # start mariadb
 
-# sleep 10
-
 #--------------mariadb config--------------#
 # Create database if not exists
 mariadb -e "CREATE DATABASE IF NOT EXISTS \`${MYSQL_DB}\`;"
