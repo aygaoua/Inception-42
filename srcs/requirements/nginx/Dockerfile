@@ -27,4 +27,3 @@ RUN chown -R www-data:www-data /var/www/wordpress
 
 # define the command to run when the container starts
 CMD ["nginx", "-g", "daemon off;"]
-# CMD ["sh", "-c", "sleep 20 && nginx -g 'daemon off;'"]
