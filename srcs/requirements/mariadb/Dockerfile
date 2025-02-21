@@ -12,4 +12,4 @@ COPY tools/mdb-conf.sh /
 
 RUN chmod +x mdb-conf.sh
 
-CMD ["./mdb-conf.sh"]
+ENTRYPOINT ["./mdb-conf.sh"]
