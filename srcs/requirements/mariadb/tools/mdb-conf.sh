@@ -1,7 +1,10 @@
 #!/bin/bash
 
 #--------------mariadb start--------------#
-service mariadb start
+
+mysqld_safe --nowatch
+
+echo "Waiting for MariaDB to start..."
 
 sleep 5
 
@@ -15,6 +18,6 @@ mariadb -e "GRANT ALL PRIVILEGES ON ${MYSQL_DB}.* TO \`${MYSQL_USER}\`@'%';"
 mariadb -e "FLUSH PRIVILEGES;"
 
 #--------------mariadb restart--------------#
-mysqladmin -u root -p$MYSQL_ROOT_PASSWORD shutdown
+mysqladmin -u root shutdown
 
 exec mysqld_safe

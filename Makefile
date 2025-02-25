@@ -1,8 +1,6 @@
 all: up
 
 up: build
-	sudo mkdir -p /home/azgaoua/data/wordpress
-	sudo mkdir -p /home/azgaoua/data/mariadb
 	docker-compose -f ./srcs/docker-compose.yml up -d
 
 down:
@@ -18,16 +16,17 @@ build:
 	docker-compose -f ./srcs/docker-compose.yml build
 
 clean-imgs:
-	docker images -q | xargs docker rmi -f
+	docker images -q | xargs -r docker rmi -f
 
 clean-containers-volumes:
 	docker rm -vf $$(docker ps -aq)
-	docker volume rm mariadb wordpress
+	docker volume rm mariadb wordpress || true
 
 clean: clean-containers-volumes clean-imgs
 
 re: clean up
 
 prune: clean
-	sudo rm -rf /home/azgaoua/data/
 	docker system prune -a --volumes -f
+
+.PHONY: down stop start build clean-imgs clean-containers-volumes
