@@ -2,22 +2,19 @@
 
 #--------------mariadb start--------------#
 
-mysqld_safe --nowatch
+mysqld_safe &
 
 echo "Waiting for MariaDB to start..."
 
 sleep 5
 
 #--------------mariadb config--------------#
-mariadb -e "CREATE DATABASE IF NOT EXISTS \`${MYSQL_DB}\`;"
 
-mariadb -e "CREATE USER IF NOT EXISTS \`${MYSQL_USER}\`@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';"
-
-mariadb -e "GRANT ALL PRIVILEGES ON ${MYSQL_DB}.* TO \`${MYSQL_USER}\`@'%';"
-
-mariadb -e "FLUSH PRIVILEGES;"
+echo  "CREATE DATABASE IF NOT EXISTS $MYSQL_DB; GRANT ALL ON $MYSQL_DB.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';" \
+                   "ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';" "FLUSH PRIVILEGES;" | mysql -u root -p${MYSQL_ROOT_PASSWORD}
 
 #--------------mariadb restart--------------#
-mysqladmin -u root shutdown
+
+mysqladmin shutdown -p${MYSQL_ROOT_PASSWORD}
 
 exec mysqld_safe
