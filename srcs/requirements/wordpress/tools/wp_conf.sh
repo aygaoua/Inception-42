@@ -15,13 +15,16 @@ if [ ! -f /var/www/wordpress/wp-config.php ]; then
     wp core download --allow-root
 
     echo "Configuring WordPress database settings..."
-    wp core config --dbhost=mariadb:3306 --dbname="$MYSQL_DB" --dbuser="$MYSQL_USER" --dbpass="$MYSQL_PASSWORD" --allow-root
+    wp core config --dbhost=mariadb:3306 --dbname="$MYSQL_DB" --dbuser="$MYSQL_USER" --dbpass=$(cat /run/secrets/MYSQL_PASSWORD) --allow-root
 
     echo "Installing WordPress..."
-    wp core install --url="$DOMAIN_NAME" --title="$WP_TITLE" --admin_user="$WP_ADMIN_N" --admin_password="$WP_ADMIN_P" --admin_email="$WP_ADMIN_E" --allow-root
+    ln -s /bin/true /usr/sbin/sendmail
+    wp core install --url="$DOMAIN_NAME" --title="$WP_TITLE" --admin_user="$WP_ADMIN_N" --admin_password=$(cat /run/secrets/WP_ADMIN_P) --admin_email="$WP_ADMIN_E" --allow-root
 
     echo "Creating WordPress user..."
-    wp user create "$WP_U_NAME" "$WP_U_EMAIL" --user_pass="$WP_U_PASS" --role="$WP_U_ROLE" --allow-root
+    wp user create "$WP_U_NAME" "$WP_U_EMAIL" --user_pass=$(cat /run/secrets/WP_U_PASS) --role="$WP_U_ROLE" --allow-root
+
+
 else
     echo "wp-config.php already exists. Skipping WordPress installation."
 fi

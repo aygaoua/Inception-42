@@ -10,6 +10,9 @@ services:
       - mariadb:/var/lib/mysql
     env_file:
       - .env
+    secrets:
+      - MYSQL_PASSWORD
+      - MYSQL_ROOT_PASSWORD
     networks:
       - inception
     restart: always
@@ -22,11 +25,15 @@ services:
       - wordpress:/var/www/wordpress
     env_file:
       - .env
+    secrets:
+      - MYSQL_PASSWORD
+      - WP_ADMIN_P
+      - WP_U_PASS
     networks:
       - inception
-    restart: always
     depends_on:
       - mariadb
+    restart: always
 
   nginx:
     image: nginx:azgaoua
@@ -38,9 +45,9 @@ services:
       - wordpress:/var/www/wordpress
     networks:
       - inception
-    restart: always
     depends_on:
       - wordpress
+    restart: always
 
 volumes:
   mariadb:
@@ -63,3 +70,14 @@ networks:
   inception:
     name: inception
     driver: bridge
+
+secrets:
+  MYSQL_PASSWORD:
+    file: ./../secrets/MYSQL_PASSWORD
+  MYSQL_ROOT_PASSWORD:
+    file: ./../secrets/MYSQL_ROOT_PASSWORD
+  WP_ADMIN_P:
+    file: ./../secrets/WP_ADMIN_P
+  WP_U_PASS:
+    file: ./../secrets/WP_U_PASS
+
