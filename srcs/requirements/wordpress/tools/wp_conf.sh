@@ -1,7 +1,10 @@
 #!/bin/bash
 #---------------------------------------------------wp installation---------------------------------------------------#
 echo "Downloading WP-CLI..."
-curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+if ! curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar; then
+    echo "Failed to download WP-CLI."
+    exit 1
+fi
 chmod +x wp-cli.phar
 mv wp-cli.phar /usr/local/bin/wp
 cd /var/www/wordpress
