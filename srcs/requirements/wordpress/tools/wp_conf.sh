@@ -24,7 +24,6 @@ if [ ! -f /var/www/wordpress/wp-config.php ]; then
     echo "Creating WordPress user..."
     wp user create "$WP_U_NAME" "$WP_U_EMAIL" --user_pass=$(cat /run/secrets/WP_U_PASS) --role="$WP_U_ROLE" --allow-root
 
-
 else
     echo "wp-config.php already exists. Skipping WordPress installation."
 fi

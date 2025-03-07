@@ -6,12 +6,6 @@ up: build
 down:
 	docker-compose -f srcs/docker-compose.yml down
 
-stop:
-	docker-compose -f srcs/docker-compose.yml stop
-
-start:
-	docker-compose -f srcs/docker-compose.yml start
-
 build:
 	docker-compose -f srcs/docker-compose.yml build
 
@@ -25,8 +19,6 @@ clean-containers-volumes:
 clean: clean-containers-volumes clean-imgs
 
 prune: clean
-	sudo rm -rf /home/azgaoua/data/mariadb/*
-	sudo rm -rf /home/azgaoua/data/wordpress/*
 	docker system prune -a --volumes -f
 
 re: prune up

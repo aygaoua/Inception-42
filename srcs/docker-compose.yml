@@ -16,6 +16,12 @@ services:
     networks:
       - inception
     restart: always
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
 
   wordpress:
     image: wordpress:azgaoua
@@ -32,7 +38,8 @@ services:
     networks:
       - inception
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
     restart: always
 
   nginx:
@@ -52,7 +59,6 @@ services:
 volumes:
   mariadb:
     name: mariadb
-    driver: local
     driver_opts:
       device: /home/azgaoua/data/mariadb
       o: bind
@@ -60,7 +66,6 @@ volumes:
 
   wordpress:
     name: wordpress
-    driver: local
     driver_opts:
       device: /home/azgaoua/data/wordpress
       o: bind
