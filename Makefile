@@ -23,4 +23,4 @@ prune: clean
 
 re: prune up
 
-.PHONY: down stop start build clean-imgs clean-containers-volumes
+.PHONY: down build clean-imgs clean-containers-volumes
